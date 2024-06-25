@@ -8,7 +8,6 @@ import numpy as np
 from collections import deque
 import pyrealsense2 as rs
 from pynput import keyboard
-import threading
 print("Environment is Ready")
 
 #**************Prepare for rscam**************#
