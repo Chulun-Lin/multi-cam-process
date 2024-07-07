@@ -94,6 +94,8 @@ def on_press(key):
             KEY = 'SPACE'
         if key == keyboard.Key.enter:
             KEY = 'ENTER'
+        if key.char == 's':
+            KEY = 'SAVE'
 
     except AttributeError:
         print(f'-{key}- is pressed')
@@ -137,6 +139,8 @@ if __name__ == "__main__":
 
     pause_flag = True
 
+    num = 0
+
     while True:
         pool.map(image_infer,source_ids)
 
@@ -164,13 +168,20 @@ if __name__ == "__main__":
             cv2.namedWindow('RealSense D455', cv2.WINDOW_AUTOSIZE)
             cv2.imshow('RealSense D455', cv2.cvtColor(images, cv2.COLOR_RGB2BGR))
             cv2.waitKey(1)
-            for i,Frame in enumerate(recent_Frames):
+            for i, Frame in enumerate(recent_Frames):
                 cv2.namedWindow(URLS[i][-18:-4], cv2.WINDOW_AUTOSIZE)
-                cv2.imshow(URLS[i][-18:-4],cv2.resize(Frame[0],(960,540)))
+                cv2.imshow(URLS[i][-18:-4], cv2.resize(Frame[0],(960,540)))
                 cv2.waitKey(1)
 
         # Keyboard operation
-        if KEY == 'SPACE' and pause_flag is True:       # press 'space' to pause capturing
+        if KEY == 'SAVE':                               # press 's' to save images
+            KEY = 'none'
+            num += 1
+            print('Save num.' + str(num))
+            cv2.imwrite('screenshots/D455-' + str(num) + '.jpg', cv2.cvtColor(images, cv2.COLOR_RGB2BGR))
+            for i, Frame in enumerate(recent_Frames):
+                cv2.imwrite('screenshots/' + URLS[i][-18:-4] + '-' + str(num) + '.jpg', cv2.resize(Frame[0],(960,540)))
+        elif KEY == 'SPACE' and pause_flag is True:     # press 'space' to pause capturing
             KEY = 'none'
             pause_flag = False
             print('Now is pause')
